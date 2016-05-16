@@ -71,7 +71,7 @@ class TouchManager {
         handleDragGesture();
         handlePinchGesture();
 
-        if (isUpAction(event.getActionMasked())) {
+        if (isUpAction(event.getActionMasked()) && cropViewConfig.isEnsureInsideViewport()) {
             ensureInsideViewport();
         }
     }
@@ -220,8 +220,10 @@ class TouchManager {
         if (previousDistance != 0) {
             newScale *= currentDistance / previousDistance;
         }
-        newScale = newScale < minimumScale ? minimumScale : newScale;
-        newScale = newScale > maximumScale ? maximumScale : newScale;
+        if (cropViewConfig.isScaleLimit()) {
+            newScale = newScale < minimumScale ? minimumScale : newScale;
+            newScale = newScale > maximumScale ? maximumScale : newScale;
+        }
 
         scale = newScale;
     }
